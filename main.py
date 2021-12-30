@@ -10,10 +10,15 @@ turtle.shape(image)
 data = pd.read_csv("50_states.csv")
 
 correct_guess_list = []
+list_of_states = data.state.to_list()
+states_to_learn = []
 
 while len(correct_guess_list) < 50:
     answer_state = screen.textinput(title=f"{len(correct_guess_list)}/50 states correct", prompt="What's another state's name?").title()
     if answer_state == "Exit":
+        states_to_learn = [state for state in list_of_states if state not in correct_guess_list]
+        df_states_to_learn = pd.DataFrame(states_to_learn)
+        df_states_to_learn.to_csv("states_to_learn.csv")
         break
     if answer_state in data.values:
         guess_row = data[data.state == answer_state]
@@ -26,15 +31,9 @@ while len(correct_guess_list) < 50:
         correct_guess_list.append(answer_state)
 
 
-list_of_states = data.state.to_list()
-states_to_learn = []
 
-for state in list_of_states:
-    if state not in correct_guess_list:
-        states_to_learn.append(state)
 
-df_states_to_learn = pd.DataFrame(states_to_learn)
-df_states_to_learn.to_csv("states_to_learn.csv")
+
 
 
 
